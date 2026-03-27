@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClaudeCheck — Free CLAUDE.md Validator &amp; Linter</title>
+  <meta name="description" content="Validate and lint your CLAUDE.md file instantly. Catch placeholders, secrets, structural issues, and best practice violations before Claude Code reads your instructions.">
+  <meta name="keywords" content="CLAUDE.md, Claude Code, linter, validator, Anthropic, AI coding assistant, developer tools">
+  <link rel="canonical" href="https://claudecheck.pages.dev">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="ClaudeCheck — Free CLAUDE.md Validator">
+  <meta property="og:description" content="Paste your CLAUDE.md and get instant feedback. 12 rules check for placeholders, secrets, structure, and best practices.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://claudecheck.pages.dev">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ClaudeCheck — Free CLAUDE.md Validator">
+  <meta name="twitter:description" content="Validate your CLAUDE.md instantly. 12 rules for better AI instructions.">
+
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface-hover: #1c2129;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --accent-hover: #79b8ff;
+      --error: #f85149;
+      --error-bg: #f8514920;
+      --warning: #d29922;
+      --warning-bg: #d2992220;
+      --info: #58a6ff;
+      --info-bg: #58a6ff20;
+      --success: #3fb950;
+      --success-bg: #3fb95020;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 span { color: var(--accent); }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .editor-area {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+
+    textarea {
+      width: 100%;
+      height: 320px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.875rem;
+      padding: 1rem;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    textarea:focus { border-color: var(--accent); }
+
+    textarea::placeholder { color: var(--text-muted); }
+
+    .actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.25rem;
+      border-radius: 6px;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-primary:hover { background: var(--accent-hover); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-muted);
+      border-color: var(--border);
+    }
+
+    .btn-secondary:hover {
+      color: var(--text);
+      border-color: var(--text-muted);
+    }
+
+    .char-count {
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+      margin-left: auto;
+    }
+
+    #results {
+      margin-top: 1.5rem;
+    }
+
+    .summary-bar {
+      display: flex;
+      gap: 1.5rem;
+      padding: 1rem 1.25rem;
+      background: var(--surface);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .summary-item {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-size: 0.9375rem;
+      font-weight: 600;
+    }
+
+    .summary-item.errors { color: var(--error); }
+    .summary-item.warnings { color: var(--warning); }
+    .summary-item.infos { color: var(--info); }
+    .summary-item.passed { color: var(--success); }
+
+    .result-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+      font-size: 0.9375rem;
+    }
+
+    .result-item.error { background: var(--error-bg); border-left: 3px solid var(--error); }
+    .result-item.warning { background: var(--warning-bg); border-left: 3px solid var(--warning); }
+    .result-item.info { background: var(--info-bg); border-left: 3px solid var(--info); }
+    .result-item.pass { background: var(--success-bg); border-left: 3px solid var(--success); }
+
+    .result-icon { font-size: 1rem; flex-shrink: 0; margin-top: 2px; }
+    .result-icon.error { color: var(--error); }
+    .result-icon.warning { color: var(--warning); }
+    .result-icon.info { color: var(--info); }
+    .result-icon.pass { color: var(--success); }
+
+    .result-body { flex: 1; }
+
+    .result-rule {
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+      font-family: monospace;
+    }
+
+    .result-line {
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+    }
+
+    .all-passed {
+      text-align: center;
+      padding: 2rem;
+      background: var(--success-bg);
+      border-radius: 8px;
+      border: 1px solid var(--success);
+    }
+
+    .all-passed h2 { color: var(--success); margin-bottom: 0.5rem; }
+
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+    }
+
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    .info-section {
+      margin-top: 3rem;
+      padding: 2rem;
+      background: var(--surface);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .info-section h2 {
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .rule-card {
+      padding: 0.75rem;
+      background: var(--bg);
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    .rule-card code {
+      font-size: 0.8125rem;
+      color: var(--accent);
+    }
+
+    .rule-card p {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.125rem 0.375rem;
+      border-radius: 3px;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge.error { background: var(--error-bg); color: var(--error); }
+    .badge.warning { background: var(--warning-bg); color: var(--warning); }
+    .badge.info { background: var(--info-bg); color: var(--info); }
+
+    @media (max-width: 600px) {
+      .container { padding: 1rem; }
+      h1 { font-size: 1.5rem; }
+      textarea { height: 250px; }
+      .summary-bar { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><span>ClaudeCheck</span> — CLAUDE.md Validator</h1>
+      <p class="subtitle">Paste your CLAUDE.md and get instant feedback. 12 rules check for placeholders, leaked secrets, structural issues, and best practices.</p>
+    </header>
+
+    <div class="editor-area">
+      <textarea id="editor" placeholder="# My Project
+
+## Tech Stack
+- TypeScript, React, Node.js
+
+## Code Style
+- Use functional components with hooks
+- Prefer const over let
+- Always use explicit return types
+
+## Testing
+- Run `npm test` before committing
+- Minimum 80% coverage for new code
+
+Paste your CLAUDE.md here..."></textarea>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" id="lint-btn" onclick="runLint()">&#9654; Validate</button>
+      <button class="btn btn-secondary" id="clear-btn" onclick="clearAll()">Clear</button>
+      <button class="btn btn-secondary" id="example-btn" onclick="loadExample()">Load Example</button>
+      <span class="char-count" id="char-count">0 chars</span>
+    </div>
+
+    <div id="results"></div>
+
+    <div class="info-section">
+      <h2>What does ClaudeCheck validate?</h2>
+      <p style="color: var(--text-muted); margin-bottom: 1rem;">ClaudeCheck runs 12 rules against your CLAUDE.md to ensure Claude Code gets the best possible instructions.</p>
+      <div class="rules-grid">
+        <div class="rule-card">
+          <code>file-not-empty</code> <span class="badge error">error</span>
+          <p>File must not be empty</p>
+        </div>
+        <div class="rule-card">
+          <code>has-title</code> <span class="badge error">error</span>
+          <p>Must have a top-level # heading</p>
+        </div>
+        <div class="rule-card">
+          <code>no-placeholders</code> <span class="badge error">error</span>
+          <p>No [TODO], [Your X], [INSERT] leftovers</p>
+        </div>
+        <div class="rule-card">
+          <code>no-secrets</code> <span class="badge error">error</span>
+          <p>No API keys, tokens, or passwords</p>
+        </div>
+        <div class="rule-card">
+          <code>min-length</code> <span class="badge warning">warn</span>
+          <p>Should be 200+ characters</p>
+        </div>
+        <div class="rule-card">
+          <code>has-sections</code> <span class="badge warning">warn</span>
+          <p>Should have multiple ## sections</p>
+        </div>
+        <div class="rule-card">
+          <code>heading-hierarchy</code> <span class="badge warning">warn</span>
+          <p>No skipped heading levels (h1→h3)</p>
+        </div>
+        <div class="rule-card">
+          <code>no-empty-sections</code> <span class="badge warning">warn</span>
+          <p>Sections must have content</p>
+        </div>
+        <div class="rule-card">
+          <code>has-actionable-content</code> <span class="badge info">info</span>
+          <p>Should contain rules or guidelines</p>
+        </div>
+        <div class="rule-card">
+          <code>max-length</code> <span class="badge info">info</span>
+          <p>Warns if over 50K characters</p>
+        </div>
+        <div class="rule-card">
+          <code>consistent-list-style</code> <span class="badge info">info</span>
+          <p>Don't mix - and * list markers</p>
+        </div>
+        <div class="rule-card">
+          <code>no-bare-urls</code> <span class="badge info">info</span>
+          <p>Use [text](url) markdown links</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-section" style="margin-top: 1.5rem;">
+      <h2>What is CLAUDE.md?</h2>
+      <p style="color: var(--text-muted);">CLAUDE.md is a configuration file for <a href="https://docs.anthropic.com/en/docs/claude-code" style="color: var(--accent);">Claude Code</a>, Anthropic's AI coding assistant. It tells Claude about your project's conventions, tech stack, coding style, and rules. A well-written CLAUDE.md dramatically improves the quality of AI-generated code.</p>
+      <p style="color: var(--text-muted); margin-top: 0.75rem;">ClaudeCheck helps you write better CLAUDE.md files by catching common mistakes: leftover placeholder text from templates, accidentally committed secrets, poor structure, and missing best practices.</p>
+      <p style="color: var(--text-muted); margin-top: 0.75rem;">Also available as a <a href="https://github.com/lunacompsia-oss/claudecheck" style="color: var(--accent);">CLI tool</a> (<code>npx claudecheck</code>) and <a href="https://github.com/marketplace/actions/claudecheck" style="color: var(--accent);">GitHub Action</a>.</p>
+    </div>
+
+    <footer>
+      <p>Built by <a href="https://github.com/lunacompsia-oss">Lunacompsia</a> &middot; <a href="https://github.com/lunacompsia-oss/claudecheck">GitHub</a> &middot; MIT License</p>
+      <p style="margin-top: 0.25rem;">Your CLAUDE.md content never leaves your browser. All validation runs locally.</p>
+    </footer>
+  </div>
+
+  <script>
+    // === ClaudeCheck Linter (browser port) ===
+
+    const PLACEHOLDER_PATTERNS = [
+      /\[Project Name\]/i,
+      /\[Language\]/i,
+      /\[Framework\]/i,
+      /\[Your .+?\]/i,
+      /\[TODO\]/i,
+      /\[PLACEHOLDER\]/i,
+      /\[INSERT .+?\]/i,
+      /\[CHANGE THIS\]/i,
+      /\[FILL IN\]/i,
+    ];
+
+    const SECRET_PATTERNS = [
+      { pattern: /(?:api[_-]?key|apikey)\s*[:=]\s*['"][A-Za-z0-9_\-]{20,}['"]/i, name: "API key" },
+      { pattern: /(?:secret|token|password|passwd)\s*[:=]\s*['"][A-Za-z0-9_\-]{8,}['"]/i, name: "secret/token" },
+      { pattern: /sk-[A-Za-z0-9]{20,}/, name: "OpenAI/Anthropic key" },
+      { pattern: /ghp_[A-Za-z0-9]{36,}/, name: "GitHub PAT" },
+      { pattern: /(?:AKIA|ASIA)[A-Z0-9]{16}/, name: "AWS access key" },
+      { pattern: /xox[bpsa]-[A-Za-z0-9\-]+/, name: "Slack token" },
+    ];
+
+    const rules = [
+      {
+        id: "file-not-empty",
+        severity: "error",
+        check(content) {
+          if (content.trim().length === 0) return { passed: false, message: "CLAUDE.md is empty" };
+          return { passed: true };
+        },
+      },
+      {
+        id: "has-title",
+        severity: "error",
+        check(content, lines) {
+          if (!lines.find(l => /^# .+/.test(l))) return { passed: false, message: "Missing top-level heading (# Title)", line: 1 };
+          return { passed: true };
+        },
+      },
+      {
+        id: "min-length",
+        severity: "warning",
+        check(content) {
+          if (content.length < 200) return { passed: false, message: `CLAUDE.md is very short (${content.length} chars). A useful CLAUDE.md typically has 500+ characters.` };
+          return { passed: true };
+        },
+      },
+      {
+        id: "has-sections",
+        severity: "warning",
+        check(content, lines, headings) {
+          if (headings.length < 2) return { passed: false, message: "Only 1 section found. Good CLAUDE.md files have multiple sections (## Tech Stack, ## Code Style, etc.)." };
+          return { passed: true };
+        },
+      },
+      {
+        id: "no-placeholders",
+        severity: "error",
+        check(content, lines) {
+          for (let i = 0; i < lines.length; i++) {
+            for (const pattern of PLACEHOLDER_PATTERNS) {
+              const match = lines[i].match(pattern);
+              if (match) return { passed: false, message: `Placeholder text found: "${match[0]}". Replace with actual project details.`, line: i + 1 };
+            }
+          }
+          return { passed: true };
+        },
+      },
+      {
+        id: "no-secrets",
+        severity: "error",
+        check(content, lines) {
+          for (let i = 0; i < lines.length; i++) {
+            if (/^```/.test(lines[i])) continue;
+            for (const { pattern, name } of SECRET_PATTERNS) {
+              if (pattern.test(lines[i])) return { passed: false, message: `Possible ${name} detected. Never put credentials in CLAUDE.md.`, line: i + 1 };
+            }
+          }
+          return { passed: true };
+        },
+      },
+      {
+        id: "heading-hierarchy",
+        severity: "warning",
+        check(content, lines) {
+          let prevLevel = 0;
+          for (let i = 0; i < lines.length; i++) {
+            const match = lines[i].match(/^(#{1,6})\s/);
+            if (match) {
+              const level = match[1].length;
+              if (prevLevel > 0 && level > prevLevel + 1) return { passed: false, message: `Heading jumps from h${prevLevel} to h${level}. Use sequential levels.`, line: i + 1 };
+              prevLevel = level;
+            }
+          }
+          return { passed: true };
+        },
+      },
+      {
+        id: "no-empty-sections",
+        severity: "warning",
+        check(content, lines) {
+          for (let i = 0; i < lines.length; i++) {
+            const hm = lines[i].match(/^(#{1,6})\s/);
+            if (hm) {
+              if (hm[1].length === 1) continue;
+              let j = i + 1;
+              while (j < lines.length && lines[j].trim() === "") j++;
+              if (j >= lines.length || /^#{1,6}\s/.test(lines[j])) {
+                const heading = lines[i].replace(/^#+\s*/, "");
+                return { passed: false, message: `Empty section: "${heading}". Add content or remove the heading.`, line: i + 1 };
+              }
+            }
+          }
+          return { passed: true };
+        },
+      },
+      {
+        id: "has-actionable-content",
+        severity: "info",
+        check(content) {
+          const patterns = [/\b(?:always|never|must|should|prefer|avoid|use|do not|don't)\b/i, /```/, /^\s*[-*]\s/m];
+          if (!patterns.some(p => p.test(content))) return { passed: false, message: "No actionable guidelines found. Add rules, conventions, or code examples." };
+          return { passed: true };
+        },
+      },
+      {
+        id: "max-length",
+        severity: "info",
+        check(content) {
+          if (content.length > 50000) return { passed: false, message: `Very large (${Math.round(content.length / 1000)}K chars). Consider splitting into sub-files.` };
+          return { passed: true };
+        },
+      },
+      {
+        id: "consistent-list-style",
+        severity: "info",
+        check(content, lines) {
+          let d = 0, s = 0;
+          for (const l of lines) { if (/^\s*-\s/.test(l)) d++; if (/^\s*\*\s/.test(l)) s++; }
+          if (d > 0 && s > 0) return { passed: false, message: `Mixed list markers: ${d} dash (-) and ${s} asterisk (*). Pick one.` };
+          return { passed: true };
+        },
+      },
+      {
+        id: "no-bare-urls",
+        severity: "info",
+        check(content, lines) {
+          for (let i = 0; i < lines.length; i++) {
+            if (/^```/.test(lines[i])) continue;
+            if (/(?<!\(|`)https?:\/\/[^\s)]+(?!\)|`)/.test(lines[i]) && !/\[.+?\]\(https?:\/\//.test(lines[i])) {
+              const stripped = lines[i].replace(/\[.+?\]\(https?:\/\/[^\s)]+\)/g, "");
+              if (/(?<!\||`|<)https?:\/\/\S+/.test(stripped)) return { passed: false, message: "Bare URL found. Use markdown links [text](url) for better readability.", line: i + 1 };
+            }
+          }
+          return { passed: true };
+        },
+      },
+    ];
+
+    function parseHeadings(lines) {
+      const headings = [];
+      let inCodeBlock = false;
+      for (let i = 0; i < lines.length; i++) {
+        if (/^```/.test(lines[i])) { inCodeBlock = !inCodeBlock; continue; }
+        if (inCodeBlock) continue;
+        const match = lines[i].match(/^(#{1,6})\s+(.+)/);
+        if (match) headings.push({ level: match[1].length, text: match[2].trim(), line: i + 1 });
+      }
+      return headings;
+    }
+
+    function lint(content) {
+      const lines = content.split("\n");
+      const headings = parseHeadings(lines);
+      const results = [];
+      for (const rule of rules) {
+        try {
+          const r = rule.check(content, lines, headings);
+          results.push({ id: rule.id, severity: rule.severity, passed: r.passed, message: r.message || null, line: r.line || null });
+        } catch (e) {
+          results.push({ id: rule.id, severity: rule.severity, passed: false, message: `Rule crashed: ${e.message}`, line: null });
+        }
+      }
+      const summary = {
+        errors: results.filter(r => !r.passed && r.severity === "error").length,
+        warnings: results.filter(r => !r.passed && r.severity === "warning").length,
+        info: results.filter(r => !r.passed && r.severity === "info").length,
+        passed: results.filter(r => r.passed).length,
+        total: results.length,
+      };
+      return { results, summary };
+    }
+
+    // === UI ===
+
+    const editor = document.getElementById("editor");
+    const resultsDiv = document.getElementById("results");
+    const charCount = document.getElementById("char-count");
+
+    editor.addEventListener("input", () => {
+      charCount.textContent = `${editor.value.length} chars`;
+    });
+
+    function runLint() {
+      const content = editor.value;
+      if (!content.trim()) {
+        resultsDiv.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 1rem;">Paste your CLAUDE.md content above, then click Validate.</p>';
+        return;
+      }
+
+      const { results, summary } = lint(content);
+
+      let html = `<div class="summary-bar">
+        <span class="summary-item errors">${summary.errors} error${summary.errors !== 1 ? 's' : ''}</span>
+        <span class="summary-item warnings">${summary.warnings} warning${summary.warnings !== 1 ? 's' : ''}</span>
+        <span class="summary-item infos">${summary.info} info</span>
+        <span class="summary-item passed">${summary.passed}/${summary.total} passed</span>
+      </div>`;
+
+      if (summary.errors === 0 && summary.warnings === 0 && summary.info === 0) {
+        html += `<div class="all-passed"><h2>All ${summary.total} checks passed!</h2><p style="color: var(--text-muted);">Your CLAUDE.md looks great. Claude Code will love it.</p></div>`;
+      } else {
+        const icons = { error: "\u2716", warning: "\u26a0", info: "\u2139" };
+        const failures = results.filter(r => !r.passed);
+        const passes = results.filter(r => r.passed);
+
+        for (const r of failures) {
+          html += `<div class="result-item ${r.severity}">
+            <span class="result-icon ${r.severity}">${icons[r.severity]}</span>
+            <div class="result-body">
+              <div>${r.message}</div>
+              <div><span class="result-rule">${r.id}</span>${r.line ? ` <span class="result-line">line ${r.line}</span>` : ''}</div>
+            </div>
+          </div>`;
+        }
+
+        if (passes.length > 0) {
+          html += `<div style="margin-top: 0.75rem; padding: 0.5rem 0; color: var(--text-muted); font-size: 0.875rem;">
+            <details><summary style="cursor: pointer;">${passes.length} check${passes.length !== 1 ? 's' : ''} passed</summary>
+            <div style="margin-top: 0.5rem;">`;
+          for (const r of passes) {
+            html += `<div class="result-item pass">
+              <span class="result-icon pass">\u2714</span>
+              <div class="result-body"><span class="result-rule">${r.id}</span></div>
+            </div>`;
+          }
+          html += `</div></details></div>`;
+        }
+      }
+
+      resultsDiv.innerHTML = html;
+    }
+
+    function clearAll() {
+      editor.value = "";
+      resultsDiv.innerHTML = "";
+      charCount.textContent = "0 chars";
+    }
+
+    function loadExample() {
+      editor.value = `# My Awesome Project
+
+## Tech Stack
+- TypeScript, React 18, Next.js 14
+- PostgreSQL with Prisma ORM
+- Tailwind CSS for styling
+
+## Code Style
+- Use functional components with hooks
+- Prefer \`const\` over \`let\`, never use \`var\`
+- Always use explicit return types for functions
+- Use named exports, not default exports
+
+## Testing
+- Run \`npm test\` before committing
+- Use \`vitest\` for unit tests
+- Minimum 80% coverage for new code
+- Integration tests go in \`__tests__/integration/\`
+
+## Git Conventions
+- Use conventional commits (feat:, fix:, chore:)
+- Always create a branch for new features
+- Squash merge to main
+
+## Project Structure
+- \`src/components/\` — React components
+- \`src/lib/\` — Shared utilities
+- \`src/app/\` — Next.js app router pages
+- \`prisma/\` — Database schema and migrations`;
+      charCount.textContent = `${editor.value.length} chars`;
+      runLint();
+    }
+
+    // Auto-validate on Ctrl+Enter
+    editor.addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+        e.preventDefault();
+        runLint();
+      }
+    });
+  </script>
+
+  <!-- Structured Data for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "ClaudeCheck",
+    "description": "Free online CLAUDE.md validator and linter for Claude Code projects",
+    "url": "https://claudecheck.pages.dev",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "Lunacompsia",
+      "url": "https://github.com/lunacompsia-oss"
+    }
+  }
+  </script>
+</body>
+</html>
