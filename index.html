@@ -287,6 +287,13 @@
 </head>
 <body>
   <div class="container">
+    <nav style="display:flex;gap:1.5rem;align-items:center;padding:1rem 0;border-bottom:1px solid var(--border);margin-bottom:2rem;flex-wrap:wrap;">
+      <a href="/" style="color:var(--accent);font-weight:700;font-size:1.05rem;text-decoration:none;">ClaudeCheck</a>
+      <a href="/guide/" style="color:var(--text-muted);text-decoration:none;font-size:0.9375rem;">Guide</a>
+      <a href="/examples/" style="color:var(--text-muted);text-decoration:none;font-size:0.9375rem;">Examples</a>
+      <a href="/" style="color:var(--text-muted);text-decoration:none;font-size:0.9375rem;">Validator</a>
+    </nav>
+
     <header>
       <h1><span>ClaudeCheck</span> — CLAUDE.md Validator</h1>
       <p class="subtitle">Paste your CLAUDE.md and get instant feedback. 12 rules check for placeholders, leaked secrets, structural issues, and best practices.</p>
@@ -379,6 +386,7 @@ Paste your CLAUDE.md here..."></textarea>
       <p style="color: var(--text-muted);">CLAUDE.md is a configuration file for <a href="https://docs.anthropic.com/en/docs/claude-code" style="color: var(--accent);">Claude Code</a>, Anthropic's AI coding assistant. It tells Claude about your project's conventions, tech stack, coding style, and rules. A well-written CLAUDE.md dramatically improves the quality of AI-generated code.</p>
       <p style="color: var(--text-muted); margin-top: 0.75rem;">ClaudeCheck helps you write better CLAUDE.md files by catching common mistakes: leftover placeholder text from templates, accidentally committed secrets, poor structure, and missing best practices.</p>
       <p style="color: var(--text-muted); margin-top: 0.75rem;">Also available as a <a href="https://github.com/lunacompsia-oss/claudecheck" style="color: var(--accent);">CLI tool</a> (<code>npx claudecheck</code>) and <a href="https://github.com/marketplace/actions/claudecheck" style="color: var(--accent);">GitHub Action</a>.</p>
+      <p style="color: var(--text-muted); margin-top: 0.75rem;">New here? Read the <a href="/guide/" style="color: var(--accent);">complete CLAUDE.md guide</a> or browse <a href="/examples/" style="color: var(--accent);">ready-to-use examples</a>.</p>
     </div>
 
     <footer>

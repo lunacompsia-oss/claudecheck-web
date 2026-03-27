@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CLAUDE.md Examples — Templates for Every Project Type</title>
+  <meta name="description" content="Real CLAUDE.md examples for React, Python, Go, Rust, and more. Copy-paste templates ready for Claude Code. Tested and validated.">
+  <meta name="keywords" content="CLAUDE.md examples, CLAUDE.md template, Claude Code examples, Claude Code configuration, CLAUDE.md React, CLAUDE.md Python, CLAUDE.md Go">
+  <link rel="canonical" href="https://claudecheck.pages.dev/examples/">
+
+  <meta property="og:title" content="CLAUDE.md Examples — Templates for Every Project Type">
+  <meta property="og:description" content="Copy-paste CLAUDE.md templates for React, Python, Go, Rust, and more. Tested and validated by ClaudeCheck.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://claudecheck.pages.dev/examples/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CLAUDE.md Examples for Every Project Type">
+  <meta name="twitter:description" content="Copy-paste CLAUDE.md templates for React, Python, Go, Rust, and more.">
+
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --accent-hover: #79b8ff;
+      --success: #3fb950;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    .container { max-width: 780px; margin: 0 auto; padding: 2rem 1.5rem; }
+    nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    nav a { color: var(--text-muted); text-decoration: none; font-size: 0.9375rem; }
+    nav a:hover { color: var(--accent); }
+    nav .brand { color: var(--accent); font-weight: 700; font-size: 1.05rem; }
+    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.75rem; line-height: 1.3; }
+    h1 span { color: var(--accent); }
+    .meta { color: var(--text-muted); font-size: 0.9375rem; margin-bottom: 2rem; }
+    h2 { font-size: 1.35rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 0.75rem; }
+    p { margin-bottom: 1rem; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    pre {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      overflow-x: auto;
+      margin-bottom: 1.25rem;
+      font-size: 0.8125rem;
+      line-height: 1.55;
+      position: relative;
+    }
+    pre code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      background: none;
+      padding: 0;
+    }
+    code {
+      background: var(--surface);
+      padding: 0.125rem 0.375rem;
+      border-radius: 4px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.875rem;
+    }
+    .example-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .example-header h2 { margin-top: 2rem; margin-bottom: 0; }
+    .copy-btn {
+      padding: 0.375rem 0.75rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+      cursor: pointer;
+    }
+    .copy-btn:hover { color: var(--text); border-color: var(--text-muted); }
+    .badge {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 6px;
+      font-weight: 600;
+      text-decoration: none;
+      margin-top: 0.5rem;
+    }
+    .cta:hover { background: var(--accent-hover); text-decoration: none; }
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .toc h3 { margin-top: 0; color: var(--text-muted); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    .toc ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .toc a {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.875rem;
+    }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+    }
+    footer a { color: var(--accent); }
+    @media (max-width: 600px) {
+      .container { padding: 1rem; }
+      h1 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <a href="/" class="brand">ClaudeCheck</a>
+      <a href="/guide/">Guide</a>
+      <a href="/examples/">Examples</a>
+      <a href="/">Validator</a>
+    </nav>
+
+    <h1><span>CLAUDE.md</span> Examples</h1>
+    <p class="meta">Copy-paste templates for common project types. All validated by ClaudeCheck's 12 rules.</p>
+
+    <div class="toc">
+      <h3>Jump to</h3>
+      <ul>
+        <li><a href="#react">React / Next.js</a></li>
+        <li><a href="#python">Python / FastAPI</a></li>
+        <li><a href="#go">Go</a></li>
+        <li><a href="#rust">Rust</a></li>
+        <li><a href="#node">Node.js API</a></li>
+        <li><a href="#monorepo">Monorepo</a></li>
+      </ul>
+    </div>
+
+    <!-- React / Next.js -->
+    <div class="example-header">
+      <h2 id="react">React / Next.js</h2>
+      <button class="copy-btn" onclick="copyExample('react-example')">Copy</button>
+    </div>
+    <p><span class="badge">TypeScript</span> <span class="badge">React 18</span> <span class="badge">Next.js 14</span> <span class="badge">Tailwind</span></p>
+    <pre><code id="react-example"># My App
+
+## Tech Stack
+- TypeScript 5.3, strict mode enabled
+- React 18 with functional components and hooks only
+- Next.js 14 using App Router (not Pages Router)
+- Tailwind CSS 4 for all styling (no CSS modules)
+- Prisma ORM with PostgreSQL
+- Vitest + React Testing Library for tests
+
+## Code Style
+- Named exports only, no default exports
+- Use `const` by default, `let` only when reassignment is needed
+- Prefer early returns over nested conditionals
+- Use `async/await`, never `.then()` chains
+- File naming: kebab-case (`user-profile.tsx`)
+- Component naming: PascalCase (`UserProfile`)
+- Import order: React, Next.js, third-party, local (separated by blank lines)
+
+## Project Structure
+- `src/app/` &mdash; App Router pages, layouts, and route handlers
+- `src/components/` &mdash; Shared React components
+- `src/components/ui/` &mdash; Design system primitives (Button, Input, etc.)
+- `src/lib/` &mdash; Utilities, hooks, and shared logic
+- `src/server/` &mdash; Server-only code (DB queries, auth)
+- `prisma/` &mdash; Database schema and migrations
+
+## Testing
+- Run all: `npm test`
+- Run one file: `npm test -- user-profile.test.tsx`
+- Use `describe` / `it` blocks (not `test`)
+- Mock external APIs with MSW, never mock internal modules
+- Test user behavior, not implementation details
+- New components need at least one render + interaction test
+
+## Git Conventions
+- Conventional commits: `feat:`, `fix:`, `chore:`, `docs:`
+- Branch from `main`, squash merge back
+- PR titles match commit format
+
+## Common Commands
+- `npm run dev` &mdash; Dev server on localhost:3000
+- `npm run build` &mdash; Production build
+- `npm test` &mdash; Run Vitest
+- `npm run lint` &mdash; ESLint + Prettier check
+- `npx prisma migrate dev` &mdash; Run DB migrations
+- `npx prisma studio` &mdash; Open DB browser</code></pre>
+
+    <!-- Python / FastAPI -->
+    <div class="example-header">
+      <h2 id="python">Python / FastAPI</h2>
+      <button class="copy-btn" onclick="copyExample('python-example')">Copy</button>
+    </div>
+    <p><span class="badge">Python 3.12</span> <span class="badge">FastAPI</span> <span class="badge">SQLAlchemy</span></p>
+    <pre><code id="python-example"># My API
+
+## Tech Stack
+- Python 3.12
+- FastAPI with Pydantic v2 for validation
+- SQLAlchemy 2.0 with async session (not legacy 1.x patterns)
+- PostgreSQL 16
+- Alembic for migrations
+- pytest with pytest-asyncio for testing
+- uv for dependency management
+
+## Code Style
+- Type hints on all function signatures (no `Any` unless unavoidable)
+- Use `async def` for all route handlers and DB operations
+- Pydantic models for all request/response schemas
+- Snake_case for everything (variables, functions, files)
+- Docstrings only on public functions with non-obvious behavior
+- Prefer `raise HTTPException` over returning error dicts
+- Use `Depends()` for dependency injection, never global state
+
+## Project Structure
+- `src/app/` &mdash; FastAPI application and configuration
+- `src/app/routers/` &mdash; Route handlers grouped by domain
+- `src/app/models/` &mdash; SQLAlchemy models
+- `src/app/schemas/` &mdash; Pydantic request/response schemas
+- `src/app/services/` &mdash; Business logic layer
+- `src/app/deps.py` &mdash; Shared dependencies (DB session, auth)
+- `alembic/` &mdash; Database migrations
+- `tests/` &mdash; Test files mirroring src structure
+
+## Testing
+- Run all: `uv run pytest`
+- Run one: `uv run pytest tests/test_users.py -v`
+- Use `pytest.mark.asyncio` for async tests
+- Use factory fixtures for test data, not raw SQL
+- Integration tests hit a real test database (no mocks for DB)
+- API tests use `httpx.AsyncClient` with `app` fixture
+
+## Common Commands
+- `uv run fastapi dev` &mdash; Dev server with hot reload
+- `uv run pytest` &mdash; Run tests
+- `uv run alembic upgrade head` &mdash; Run migrations
+- `uv run alembic revision --autogenerate -m "desc"` &mdash; Generate migration
+- `uv run ruff check .` &mdash; Lint
+- `uv run ruff format .` &mdash; Format</code></pre>
+
+    <!-- Go -->
+    <div class="example-header">
+      <h2 id="go">Go</h2>
+      <button class="copy-btn" onclick="copyExample('go-example')">Copy</button>
+    </div>
+    <p><span class="badge">Go 1.22</span> <span class="badge">Chi</span> <span class="badge">PostgreSQL</span></p>
+    <pre><code id="go-example"># My Service
+
+## Tech Stack
+- Go 1.22
+- chi router for HTTP
+- pgx for PostgreSQL (not database/sql)
+- sqlc for type-safe SQL queries
+- zerolog for structured logging
+- testify for test assertions
+
+## Code Style
+- Follow standard Go conventions (gofmt, go vet)
+- Use context.Context as first parameter for functions that do I/O
+- Return errors, never panic (except in init)
+- Wrap errors with `fmt.Errorf("doing X: %w", err)`
+- Use table-driven tests
+- Interface definitions go in the consumer package, not the implementer
+- No global mutable state; pass dependencies via struct fields
+
+## Project Structure
+- `cmd/server/` &mdash; Application entrypoint
+- `internal/api/` &mdash; HTTP handlers and middleware
+- `internal/domain/` &mdash; Core business types and interfaces
+- `internal/store/` &mdash; Database queries (generated by sqlc)
+- `internal/service/` &mdash; Business logic
+- `sql/` &mdash; SQL queries and migrations
+
+## Testing
+- Run all: `go test ./...`
+- Run one package: `go test ./internal/api/ -v`
+- Integration tests use build tag: `go test -tags=integration ./...`
+- Table-driven tests for all functions with multiple cases
+- Use `testify/assert` and `testify/require`
+
+## Common Commands
+- `go run cmd/server/main.go` &mdash; Run server
+- `go test ./...` &mdash; Run all tests
+- `go vet ./...` &mdash; Static analysis
+- `sqlc generate` &mdash; Regenerate DB queries
+- `migrate -path sql/migrations -database $DB_URL up` &mdash; Run migrations</code></pre>
+
+    <!-- Rust -->
+    <div class="example-header">
+      <h2 id="rust">Rust</h2>
+      <button class="copy-btn" onclick="copyExample('rust-example')">Copy</button>
+    </div>
+    <p><span class="badge">Rust</span> <span class="badge">Axum</span> <span class="badge">SQLx</span></p>
+    <pre><code id="rust-example"># My Service
+
+## Tech Stack
+- Rust (latest stable)
+- Axum 0.7 for HTTP
+- SQLx with compile-time checked queries
+- PostgreSQL 16
+- Tokio runtime
+- tracing for structured logging
+- serde for serialization
+
+## Code Style
+- Prefer `thiserror` for library errors, `anyhow` for application errors
+- Use `?` operator for error propagation, avoid `.unwrap()` in production code
+- Derive `Debug` on all public types
+- Keep functions under 40 lines; extract helpers when longer
+- Use `impl Into&lt;String&gt;` for string parameters that accept both `&amp;str` and `String`
+- Module per file, `mod.rs` only for re-exports
+
+## Project Structure
+- `src/main.rs` &mdash; Entrypoint and server setup
+- `src/api/` &mdash; Route handlers and extractors
+- `src/models/` &mdash; Database models and domain types
+- `src/db/` &mdash; Database pool and queries
+- `src/error.rs` &mdash; Error types and conversions
+- `migrations/` &mdash; SQLx migrations
+
+## Testing
+- Run all: `cargo test`
+- Run one: `cargo test test_name`
+- Integration tests in `tests/` directory
+- Use `#[sqlx::test]` for DB-dependent tests
+- Prefer `assert_eq!` with descriptive messages
+
+## Common Commands
+- `cargo run` &mdash; Run in debug mode
+- `cargo test` &mdash; Run all tests
+- `cargo clippy` &mdash; Lints
+- `cargo fmt` &mdash; Format
+- `sqlx migrate run` &mdash; Run DB migrations</code></pre>
+
+    <!-- Node.js API -->
+    <div class="example-header">
+      <h2 id="node">Node.js API</h2>
+      <button class="copy-btn" onclick="copyExample('node-example')">Copy</button>
+    </div>
+    <p><span class="badge">Node.js 20</span> <span class="badge">Express</span> <span class="badge">TypeScript</span></p>
+    <pre><code id="node-example"># My API
+
+## Tech Stack
+- Node.js 20 LTS
+- TypeScript 5.3 in strict mode
+- Express 4 with express-async-errors
+- Drizzle ORM with PostgreSQL
+- Zod for runtime validation
+- Jest for testing
+- pnpm for package management
+
+## Code Style
+- Explicit return types on all exported functions
+- Use Zod schemas for all request validation (not manual checks)
+- Throw `AppError` (custom class) for expected errors
+- Use dependency injection via constructor parameters
+- No `any` type; use `unknown` and narrow with type guards
+- Prefer `Map` and `Set` over plain objects for dynamic keys
+
+## Project Structure
+- `src/index.ts` &mdash; Server entrypoint
+- `src/routes/` &mdash; Express route definitions
+- `src/controllers/` &mdash; Request handlers
+- `src/services/` &mdash; Business logic
+- `src/db/` &mdash; Drizzle schema and migrations
+- `src/middleware/` &mdash; Express middleware (auth, errors, logging)
+- `src/types/` &mdash; Shared TypeScript types
+
+## Testing
+- Run all: `pnpm test`
+- Run watch: `pnpm test -- --watch`
+- Unit tests colocated: `user.service.test.ts` next to `user.service.ts`
+- Integration tests in `tests/integration/`
+- Use `supertest` for API endpoint tests
+- Seed test DB with fixtures, never use production data
+
+## Common Commands
+- `pnpm dev` &mdash; Dev server with tsx watch
+- `pnpm build` &mdash; TypeScript compilation
+- `pnpm test` &mdash; Jest
+- `pnpm lint` &mdash; ESLint
+- `pnpm db:push` &mdash; Push schema to DB
+- `pnpm db:generate` &mdash; Generate migration</code></pre>
+
+    <!-- Monorepo -->
+    <div class="example-header">
+      <h2 id="monorepo">Monorepo (Turborepo)</h2>
+      <button class="copy-btn" onclick="copyExample('monorepo-example')">Copy</button>
+    </div>
+    <p><span class="badge">Turborepo</span> <span class="badge">pnpm</span> <span class="badge">TypeScript</span></p>
+    <pre><code id="monorepo-example"># My Platform
+
+## Tech Stack
+- Turborepo with pnpm workspaces
+- TypeScript 5.3 across all packages
+- Apps: Next.js 14 (web), Fastify (api), React Native (mobile)
+- Shared packages: `@repo/ui`, `@repo/db`, `@repo/config`
+
+## Code Style
+- All rules from individual app CLAUDE.md files apply within those apps
+- Shared packages use barrel exports (`index.ts`)
+- Cross-package imports must use package names (`@repo/ui`), never relative paths
+- Changes to shared packages require testing all dependent apps
+
+## Project Structure
+- `apps/web/` &mdash; Next.js frontend (has its own CLAUDE.md)
+- `apps/api/` &mdash; Fastify API server (has its own CLAUDE.md)
+- `apps/mobile/` &mdash; React Native app
+- `packages/ui/` &mdash; Shared React component library
+- `packages/db/` &mdash; Drizzle schema, shared DB client
+- `packages/config/` &mdash; Shared ESLint, TypeScript, Tailwind configs
+- `turbo.json` &mdash; Pipeline configuration
+
+## Testing
+- Run all: `pnpm test` (turborepo runs per-package test scripts)
+- Run one app: `pnpm --filter web test`
+- Run one package: `pnpm --filter @repo/ui test`
+- Shared packages must have 90% coverage
+- Apps must have 80% coverage
+
+## Common Commands
+- `pnpm dev` &mdash; Start all apps in dev mode
+- `pnpm build` &mdash; Build all (respects dependency graph)
+- `pnpm test` &mdash; Run all tests
+- `pnpm --filter web dev` &mdash; Start only web app
+- `pnpm add -D pkg --filter @repo/ui` &mdash; Add dep to specific package
+- `turbo run lint` &mdash; Lint all packages with caching</code></pre>
+
+    <h2 style="margin-top: 3rem;">Validate before committing</h2>
+    <p>Paste any of these examples (or your own CLAUDE.md) into the validator to check for issues:</p>
+    <a href="/" class="cta">Open ClaudeCheck Validator</a>
+
+    <p style="margin-top: 1.5rem;">Need more guidance? Read the <a href="/guide/">complete CLAUDE.md writing guide</a>.</p>
+
+    <footer>
+      <p><a href="/">ClaudeCheck</a> by <a href="https://github.com/lunacompsia-oss">Lunacompsia</a> &middot; <a href="https://github.com/lunacompsia-oss/claudecheck">GitHub</a> &middot; MIT License</p>
+    </footer>
+  </div>
+
+  <script>
+    function copyExample(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      navigator.clipboard.writeText(el.textContent).then(() => {
+        const btn = el.closest('.container').querySelector(`[onclick="copyExample('${id}')"]`);
+        if (btn) {
+          const orig = btn.textContent;
+          btn.textContent = 'Copied!';
+          btn.style.color = 'var(--success)';
+          btn.style.borderColor = 'var(--success)';
+          setTimeout(() => { btn.textContent = orig; btn.style.color = ''; btn.style.borderColor = ''; }, 1500);
+        }
+      });
+    }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "CLAUDE.md Examples — Templates for Every Project Type",
+    "description": "Real CLAUDE.md examples for React, Python, Go, Rust, Node.js, and monorepo projects. Copy-paste templates ready for Claude Code.",
+    "author": {
+      "@type": "Organization",
+      "name": "Lunacompsia",
+      "url": "https://github.com/lunacompsia-oss"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ClaudeCheck"
+    },
+    "datePublished": "2026-03-27",
+    "dateModified": "2026-03-27",
+    "mainEntityOfPage": "https://claudecheck.pages.dev/examples/"
+  }
+  </script>
+</body>
+</html>
